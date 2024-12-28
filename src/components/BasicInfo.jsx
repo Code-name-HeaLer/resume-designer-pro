@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PersonalInfo from './form-sections/PersonalInfo';
 import EducationInfo from './form-sections/EducationInfo';
 import SocialProfiles from './form-sections/SocialProfiles';
+import LocationPreferences from './form-sections/LocationPreferences';
 
 const BasicInfo = ({ onNext }) => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,9 @@ const BasicInfo = ({ onNext }) => {
     githubProfile: '',
     linkedinProfile: '',
     dateOfBirth: '',
+    preferredCountry: '',
+    preferredState: '',
+    preferredCity: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -47,6 +51,7 @@ const BasicInfo = ({ onNext }) => {
     if (!formData.branch) newErrors.branch = 'Branch is required';
     if (!formData.passoutYear) newErrors.passoutYear = 'Pass-out year is required';
     if (!formData.gender) newErrors.gender = 'Gender is required';
+    if (!formData.preferredCountry) newErrors.preferredCountry = 'Preferred country is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -64,20 +69,10 @@ const BasicInfo = ({ onNext }) => {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Basic Information</h2>
       
       <form onSubmit={handleSubmit} className="space-y-8">
-        <section>
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h3>
-          <PersonalInfo formData={formData} handleChange={handleChange} errors={errors} />
-        </section>
-
-        <section>
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Education Details</h3>
-          <EducationInfo formData={formData} handleChange={handleChange} errors={errors} />
-        </section>
-
-        <section>
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Social Profiles</h3>
-          <SocialProfiles formData={formData} handleChange={handleChange} />
-        </section>
+        <PersonalInfo formData={formData} handleChange={handleChange} errors={errors} />
+        <EducationInfo formData={formData} handleChange={handleChange} errors={errors} />
+        <SocialProfiles formData={formData} handleChange={handleChange} />
+        <LocationPreferences formData={formData} handleChange={handleChange} />
 
         <div className="flex justify-end pt-6">
           <button
