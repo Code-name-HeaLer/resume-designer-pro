@@ -1,15 +1,26 @@
 import { useState } from 'react';
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Select } from "./ui/select";
 
 const BasicInfo = ({ onNext }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',
-    phone: '',
     college: '',
     specialization: '',
     course: '',
-    graduationYear: '',
+    branch: '',
+    passoutYear: '',
+    cgpa: '',
+    gender: '',
+    genderOther: '',
+    githubProfile: '',
+    linkedinProfile: '',
+    preferredCountries: [],
+    preferredStates: [],
+    preferredCities: [],
+    dateOfBirth: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -33,9 +44,11 @@ const BasicInfo = ({ onNext }) => {
     const newErrors = {};
     if (!formData.firstName) newErrors.firstName = 'First name is required';
     if (!formData.lastName) newErrors.lastName = 'Last name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.phone) newErrors.phone = 'Phone is required';
     if (!formData.college) newErrors.college = 'College name is required';
+    if (!formData.specialization) newErrors.specialization = 'Specialization is required';
+    if (!formData.course) newErrors.course = 'Course is required';
+    if (!formData.passoutYear) newErrors.passoutYear = 'Pass-out year is required';
+    if (!formData.gender) newErrors.gender = 'Gender is required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -48,84 +61,171 @@ const BasicInfo = ({ onNext }) => {
     }
   };
 
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: currentYear - 1990 + 6 }, (_, i) => 1990 + i);
+
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 animate-fade-in">
+    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Basic Information</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">First Name</label>
-            <input
-              type="text"
+        {/* Personal Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="firstName">First Name</Label>
+            <Input
+              id="firstName"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm
-                ${errors.firstName ? 'border-red-500' : 'border-gray-300'}`}
+              className={`w-full ${errors.firstName ? 'border-red-500' : ''}`}
+              placeholder="Enter your first name"
             />
-            {errors.firstName && <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>}
+            {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Last Name</label>
-            <input
-              type="text"
+          <div className="space-y-2">
+            <Label htmlFor="lastName">Last Name</Label>
+            <Input
+              id="lastName"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm
-                ${errors.lastName ? 'border-red-500' : 'border-gray-300'}`}
+              className={`w-full ${errors.lastName ? 'border-red-500' : ''}`}
+              placeholder="Enter your last name"
             />
-            {errors.lastName && <p className="mt-1 text-sm text-red-500">{errors.lastName}</p>}
+            {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm
-                ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Phone</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm
-                ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">College Name</label>
-          <input
-            type="text"
+        {/* Education Information */}
+        <div className="space-y-2">
+          <Label htmlFor="college">College Name</Label>
+          <Input
+            id="college"
             name="college"
             value={formData.college}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm
-              ${errors.college ? 'border-red-500' : 'border-gray-300'}`}
+            className={`w-full ${errors.college ? 'border-red-500' : ''}`}
+            placeholder="Enter your college name"
           />
-          {errors.college && <p className="mt-1 text-sm text-red-500">{errors.college}</p>}
+          {errors.college && <p className="text-sm text-red-500">{errors.college}</p>}
         </div>
 
-        <div className="flex justify-end">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="specialization">Specialization</Label>
+            <select
+              id="specialization"
+              name="specialization"
+              value={formData.specialization}
+              onChange={handleChange}
+              className={`w-full rounded-md border ${errors.specialization ? 'border-red-500' : 'border-gray-300'} 
+                         bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-primary-500 
+                         focus:outline-none focus:ring-1 focus:ring-primary-500`}
+            >
+              <option value="">Select Specialization</option>
+              <option value="undergraduate">Undergraduate</option>
+              <option value="postgraduate">Postgraduate</option>
+            </select>
+            {errors.specialization && <p className="text-sm text-red-500">{errors.specialization}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="passoutYear">Pass-out Year</Label>
+            <select
+              id="passoutYear"
+              name="passoutYear"
+              value={formData.passoutYear}
+              onChange={handleChange}
+              className={`w-full rounded-md border ${errors.passoutYear ? 'border-red-500' : 'border-gray-300'} 
+                         bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-primary-500 
+                         focus:outline-none focus:ring-1 focus:ring-primary-500`}
+            >
+              <option value="">Select Year</option>
+              {yearOptions.map(year => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+            {errors.passoutYear && <p className="text-sm text-red-500">{errors.passoutYear}</p>}
+          </div>
+        </div>
+
+        {/* Gender Selection */}
+        <div className="space-y-2">
+          <Label htmlFor="gender">Gender</Label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className={`w-full rounded-md border ${errors.gender ? 'border-red-500' : 'border-gray-300'} 
+                       bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-primary-500 
+                       focus:outline-none focus:ring-1 focus:ring-primary-500`}
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          {errors.gender && <p className="text-sm text-red-500">{errors.gender}</p>}
+          
+          {formData.gender === 'other' && (
+            <Input
+              name="genderOther"
+              value={formData.genderOther}
+              onChange={handleChange}
+              placeholder="Please specify"
+              className="mt-2"
+            />
+          )}
+        </div>
+
+        {/* Social Profiles */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="githubProfile">GitHub Profile</Label>
+            <Input
+              id="githubProfile"
+              name="githubProfile"
+              value={formData.githubProfile}
+              onChange={handleChange}
+              placeholder="https://github.com/username"
+              type="url"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="linkedinProfile">LinkedIn Profile</Label>
+            <Input
+              id="linkedinProfile"
+              name="linkedinProfile"
+              value={formData.linkedinProfile}
+              onChange={handleChange}
+              placeholder="https://linkedin.com/in/username"
+              type="url"
+            />
+          </div>
+        </div>
+
+        {/* Date of Birth */}
+        <div className="space-y-2">
+          <Label htmlFor="dateOfBirth">Date of Birth</Label>
+          <Input
+            id="dateOfBirth"
+            name="dateOfBirth"
+            type="date"
+            value={formData.dateOfBirth}
+            onChange={handleChange}
+            className="w-full"
+          />
+        </div>
+
+        <div className="flex justify-end pt-6">
           <button
             type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 
+                     focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             Next Step
           </button>
